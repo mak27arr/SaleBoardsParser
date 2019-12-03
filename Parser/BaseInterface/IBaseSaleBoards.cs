@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SaleBoardsParser.Parser.BaseInterface
 {
@@ -8,9 +9,9 @@ namespace SaleBoardsParser.Parser.BaseInterface
     {
         public List<IAdvertisement> GetAdvertisement();
         public void UseHumanScan(bool UseHumanScan);
-        public void ScanPageAsync(string url);
+        public Task<List<IAdvertisement>> ScanPageAsync(string url);
         public List<IAdvertisement> ScanPage(string url);
-        public void SearchAsync(string param);
+        public Task<List<IAdvertisement>> SearchAsync(string param);
         public List<IAdvertisement> Search(string param);
     }
 }

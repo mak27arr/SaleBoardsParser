@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using SaleBoardsParser.Parser.BaseInterface;
 using SaleBoardsParser.Parser.BaseClasses;
+using System.Linq;
+using AngleSharp;
+using System.Threading.Tasks;
 
 namespace SaleBoardsParser.Parser.OLX
 {
@@ -12,7 +15,7 @@ namespace SaleBoardsParser.Parser.OLX
 
         public List<IAdvertisement> GetAdvertisement()
         {
-            throw new NotImplementedException();
+            return findedAdvertisement.Select(e=>(IAdvertisement)e).ToList();
         }
 
         public List<IAdvertisement> ScanPage(string url)
@@ -20,9 +23,19 @@ namespace SaleBoardsParser.Parser.OLX
             throw new NotImplementedException();
         }
 
-        public void ScanPageAsync(string url)
+        public async Task<List<IAdvertisement>> ScanPageAsync(string url)
         {
-            throw new NotImplementedException();
+            var config = Configuration.Default.WithDefaultLoader();
+            var context = BrowsingContext.New(config);
+            var document = await context.OpenAsync(url);
+            //var advertisements = document.QuerySelectorAll("div.offer-wrapper");
+            var advertisements = document.All.Where(e=>e.LocalName == "div" && e.ClassList.Contains("offer-wrapper"));
+            foreach(var itm in advertisements)
+            {
+                Console.WriteLine(itm);
+            }
+            Console.WriteLine(document);
+            return null;
         }
 
         public List<IAdvertisement> Search(string param)
@@ -30,7 +43,7 @@ namespace SaleBoardsParser.Parser.OLX
             throw new NotImplementedException();
         }
 
-        public void SearchAsync(string param)
+        public Task<List<IAdvertisement>> SearchAsync(string param)
         {
             throw new NotImplementedException();
         }
