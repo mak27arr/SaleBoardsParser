@@ -6,9 +6,9 @@ using SaleBoardsParser.Parser.BaseClasses;
 using System.Linq;
 using AngleSharp;
 using System.Threading.Tasks;
-using SaleBoardsParser.Parser.Browser;
-using ScrapySharp.Network;
+using HtmlAgilityPack;
 using ScrapySharp.Extensions;
+using ScrapySharp.Network;
 
 namespace SaleBoardsParser.Parser.OLX
 {
@@ -31,19 +31,42 @@ namespace SaleBoardsParser.Parser.OLX
             //var config = Configuration.Default.WithDefaultLoader();
             //var context = BrowsingContext.New(config);
             //var document = await context.OpenAsync(url);
-            //var advertisements = document.QuerySelectorAll("div.offer-wrapper");
+            ////var advertisements = document.QuerySelectorAll("div.offer-wrapper");
             //var advertisements = document.All.Where(e=>e.LocalName == "div" && e.ClassList.Contains("offer-wrapper"));
             //foreach(var itm in advertisements)
             //{
             //    Console.WriteLine(itm);
             //}
             //Console.WriteLine(document);
-            //CefSharpWrapper wrapper = new CefSharpWrapper();
-            //wrapper.InitializeBrowser();
             ScrapingBrowser browser = new ScrapingBrowser();
             WebPage page = browser.NavigateToPage(new Uri(url));
             var advertisements = page.Html.CssSelect(".offer-wrapper");
+
+            foreach(var adv in advertisements)
+            {
+                BaseAdvertisement ba = new BaseAdvertisement();
+                var t = adv.CssSelect(".fleft").FirstOrDefault().Attributes.Where(e => e.Name == "src");
+                ba.Img_url = adv.CssSelect(".fleft").FirstOrDefault().Attributes.Where(e=>e.Name== "src").FirstOrDefault().Value.Split(";").FirstOrDefault();
+                ba.Url = adv.CssSelect(".linkWithHash").FirstOrDefault().Attributes.Where(e => e.Name == "href").FirstOrDefault().Value;
+                ba.Name = adv.CssSelect(".title-cell").FirstOrDefault().Descendants("strong").FirstOrDefault().InnerText;
+                findedAdvertisement.Add(ba);
+            }
+
+
             return null;
+        }
+
+        private string GetNextPageUrl(string url)
+        {//?page=2
+            var url_part = url.Split("?page=");
+            if (url_part.Length > 1)
+            {
+                return url_part[0] + "?page=" + (int.Parse(url_part[1])+1);
+            }
+            else
+            {
+                return url_part[0] + "?page=2";
+            }
         }
 
         public List<IAdvertisement> Search(string param)

@@ -18,10 +18,12 @@ namespace SaleBoardsParser.Parser.BaseClasses
             } }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string url { get; set; }
+        public string Url { get; set; }
+        public string Img_url { get; set; }
         public string SectionName { get; set; }
         public IAdvertisementType Type { get; set; }
         public IUser User { get; set; }
         public int AdvertisementVievCount { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }
