@@ -25,5 +25,6 @@ namespace SaleBoardsParser.Parser.BaseClasses
         public IUser User { get; set; }
         public int AdvertisementVievCount { get; set; }
         public DateTime CreationDate { get; set; }
+        public string Location { get; set; }
     }
 }
