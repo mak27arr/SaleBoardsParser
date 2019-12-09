@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using HtmlAgilityPack;
 using ScrapySharp.Extensions;
 using ScrapySharp.Network;
+using SaleBoardsParser.Parser.Extension;
 
 namespace SaleBoardsParser.Parser.OLX
 {
@@ -49,6 +50,22 @@ namespace SaleBoardsParser.Parser.OLX
                 ba.Img_url = adv.CssSelect(".fleft").FirstOrDefault().Attributes.Where(e=>e.Name== "src").FirstOrDefault().Value.Split(";").FirstOrDefault();
                 ba.Url = adv.CssSelect(".linkWithHash").FirstOrDefault().Attributes.Where(e => e.Name == "href").FirstOrDefault().Value;
                 ba.Name = adv.CssSelect(".title-cell").FirstOrDefault().Descendants("strong").FirstOrDefault().InnerText;
+                ba.Price = adv.CssSelect(".price").FirstOrDefault().Descendants("strong").FirstOrDefault().InnerText.StringToDouble();
+                ba.SectionName = adv.CssSelect(".breadcrumb").FirstOrDefault().InnerText.Split("»").Last();
+                ba.Location = adv.CssSelect(".location-filled").FirstOrDefault().InnerText;
+                if(adv.ParentNode.GetClasses().Where(e => e == "promoted").Count() > 0)
+                    ba.Type = BaseAdvertisementType.Top;
+                else
+                    ba.Type = BaseAdvertisementType.Usual;
+
+                WebPage page = browser.NavigateToPage(new Uri(Url));
+                var advertisements = page.Html.CssSelect(".offer-wrapper");
+
+
+                ba.User = ;
+                ba.CreationDate = ;
+                ba.Description = ;
+                ba.AdvertisementVievCount = ;
                 findedAdvertisement.Add(ba);
             }
 
