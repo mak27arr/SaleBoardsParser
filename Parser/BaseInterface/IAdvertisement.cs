@@ -16,6 +16,8 @@ namespace SaleBoardsParser.Parser.BaseInterface
         IAdvertisementType Type { get; set; }
         IUser User { get; set; }
         public DateTime CreationDate { get; set; }
+        public string Location { get; set; }
+        public int Id { get; set; }
 
     }
 }

@@ -14,5 +14,13 @@ namespace SaleBoardsParser.Parser.Extension
                 double.TryParse(string.Concat(intMatch), out rezult);
                 return rezult;        
         }
+
+        public static int StringToInt(this string str)
+        {
+            var intMatch = str.Where(сh => (Char.IsDigit(сh)));
+            int rezult = 0;
+            int.TryParse(string.Concat(intMatch), out rezult);
+            return rezult;
+        }
     }
 }
